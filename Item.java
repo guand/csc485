@@ -1,4 +1,4 @@
-package project;
+package csc485project;
 
 public class Item {
 	

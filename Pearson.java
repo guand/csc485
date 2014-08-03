@@ -7,6 +7,7 @@ package csc485project;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  *
@@ -47,7 +48,8 @@ public class Pearson {
         int numOfMovies = 1700;
         HashMap userMap = new HashMap ();
         DataParser parser = new DataParser();
-        parser.parse(userMap);
+        List<Integer> uniqueMoives = new ArrayList<Integer>();
+        parser.parse(userMap,uniqueMoives);
         Pearson pearson = new Pearson();
         double cor = pearson.pearson_correlation((ArrayList<Item>)userMap.get(197), (ArrayList<Item>)userMap.get(184), numOfMovies);
         System.out.println(cor);
