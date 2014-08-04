@@ -45,7 +45,12 @@ public class BaseLine {
 					itemRatingCount[j] = itemRatingCount[j] + 1;
 				}
 			}
-			initialBuArray[i] = (double)userRatingSum/userRatingCount;
+			if (userRatingSum == 0) {
+				initialBuArray[i] = 0;
+			} else {
+				initialBuArray[i] = (double)userRatingSum/userRatingCount;
+			}
+			
 			//reset for next user
 			userRatingSum = 0;
 			userRatingCount = 0;
@@ -54,12 +59,19 @@ public class BaseLine {
 		
 		//compute initial item bias
 		for (int i = 0; i < table[0].length; i++) {
-			initialBiArray[i] = (double) initialBiArray[i]/itemRatingCount[i];
+			if (initialBiArray[i] == 0) {
+				initialBiArray[i] = 0;
+			}
+			else {
+				initialBiArray[i] = (double) initialBiArray[i]/itemRatingCount[i];
+			}
+			
+			
 		}
 		
 		
 		int mean = Math.round(sum / ratingCount);
-		System.out.println("Mean = " + mean);
+		//System.out.println("Mean = " + mean);
 		
 		for (int i = 0; i < table.length; i++) {
 			initialBuArray[i] = initialBuArray[i] - mean;
@@ -99,19 +111,23 @@ public class BaseLine {
 					bi = bi + r * (currentValue - predicted - l2 * bi);
 					loop_count ++;
 					// will loop about 52 times
-					if (((bu - previousBu) < 0.0001)&&((bi - previousBi) < 0.0001)) {
+					if (((bu - previousBu) < 0.001)&&((bi - previousBi) < 0.001)) {
 						break;
 					}
+					
+					//System.out.println(loop_count);
 
 				}
-				System.out.println("origianl = " + currentValue);
+				/*System.out.println("origianl = " + currentValue);
 				System.out.println("Bi = " + bi);
 				System.out.println("Bu = " + bu);
-				System.out.println("predicted = " + predicted + '\n');
+				System.out.println("predicted = " + predicted + '\n');*/
 				table[i][j] = predicted;
 			}
-			System.out.println();
+			//System.out.println();
 		}
+		
+		//System.out.println();
 
 	}
 
