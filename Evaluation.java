@@ -96,6 +96,62 @@ public class Evaluation {
 
 		return computeAvg(sqrMeanArray);
 	}
+	
+	// compute precision and recall by categorize rating "1-3" as irrelevant and "4-5" as relevant
+	public void precisionAndRecall (int[][] table) {
+		int [][] tablePredicted = copyTable(table);
+		int TP = 0;
+		int FP = 0;
+		int TN = 0;
+		int FN = 0;
+		
+		//apply recommendation
+		BaseLine baseline = new BaseLine();
+		baseline.compute(tablePredicted);
+		
+		for (int i = 0; i < table.length; i++) {
+			for (int j = 0; j < table[0].length; j++) {
+				
+				//skip element that we don't have the ground truth
+				if (table[i][j] == 0) {
+					continue;
+				}
+				
+				//count number of relevant in ground truth table 
+				if (table[i][j] > 3) {
+					
+					//Recommendation  predicted the item as relevant as ground truth  
+					if (tablePredicted[i][j] > 3) {
+						TP++;
+					}
+					//Recommendation  predicted the item as irrelevant, different from ground truth
+					else {
+						FN++;
+					}
+				} else {
+					
+					//Recommendation  predicted the item as relevant, different from ground truth
+					if (tablePredicted[i][j] > 3) {
+						FP++;
+					}
+					//Recommendation  predicted the item as irrelevant as ground truth 
+					else {
+						TN++;
+					}
+					
+				}
+			}
+		}
+		
+		double precision = (double) TP/(TP+FP);
+		double recall = (double) TP/(TP+FN);
+		double accurcy = (double) (TP+TN)/(TP+TN+FN+FP);
+		
+		
+		System.out.println("precision: " + precision);
+		System.out.println("recall: " + recall);
+		System.out.println("accurcy: " + accurcy);
+	}
 
 	public double computeAvg(double[] sqrMeanArray) {
 
@@ -154,6 +210,7 @@ public class Evaluation {
 
 		Evaluation eva = new Evaluation();
 		System.out.println("RMSE: "+eva.tenFoldRMSE(table));
+		eva.precisionAndRecall(table);
 		// BaseLine baseline = new BaseLine();
 		// baseline.compute(table);
 		// baseline.writeToFile(userMap, uniqueMoives, table);
