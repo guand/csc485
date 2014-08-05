@@ -13,8 +13,8 @@ import java.util.Map.Entry;
 public class DataParser {
 	
 	
-	public void parse (HashMap<Integer, ArrayList<Item>> userMap,List<Integer> uniqueMoives) throws IOException {
-		BufferedReader br = new BufferedReader(new FileReader("u.data"));
+	public void parse (Map<Integer, ArrayList<Item>> userMap,List<Integer> uniqueMoives) throws IOException {
+		BufferedReader br = new BufferedReader(new FileReader("PearsonTestingFile.data"));
 	    String line = br.readLine();
 	    while (line != null) {
 	    	
@@ -45,7 +45,7 @@ public class DataParser {
 	    br.close();
 	}
 	
-	public int[][] toTable(HashMap<Integer, ArrayList<Item>> userMap, List<Integer> uniqueMoives) {
+	public int[][] toTable(Map<Integer, ArrayList<Item>> userMap, List<Integer> uniqueMoives) {
 		
 
 		//create a new table, and initialize the elements to zero
