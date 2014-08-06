@@ -53,7 +53,7 @@ public class Pearson {
         return correlation;
     }
     
-    public void pearson_complete(ArrayList<Item> selected, int hashkey, Map<Integer, ArrayList<Item>> userMap, int ratingContain){
+    public void pearson_complete(ArrayList<Item> selected, int hashkey, Map<Integer, ArrayList<Item>> userMap, Map<Integer, ArrayList<Item>> newUserMap, int ratingContain){
           double mrating = 0.0;
           double similarity_denom = 0.0;
           double similarity_num = 0.0;
@@ -61,6 +61,7 @@ public class Pearson {
           double srating = 0.0;
           double msrating = 0.0;
           double frating = 0.0;
+          int iFrating = 0;
           int counter = 0;
           for(Item rating : selected){
               srating += rating.getRating();
@@ -90,7 +91,7 @@ public class Pearson {
                   }
               }
           }
-         Collections.sort(similarityList, Collections.reverseOrder());
+//         Collections.sort(similarityList, Collections.reverseOrder());
          for(PersonSimilarity stuff : similarityList){
 //             System.out.println(stuff.getmId() + " " + stuff.getSimilarity()+ " " + stuff.getModRating());
              if(stuff.getSimilarity() < 0)
@@ -106,7 +107,12 @@ public class Pearson {
              similarity_calc = 0.0;
         }
          frating = msrating + similarity_calc;
-         System.out.println(ratingContain + " " + frating);
+         iFrating = (int)Math.round(frating);
+         if(iFrating > 5)
+             iFrating = 5;
+         Item movie = new Item(ratingContain, iFrating);
+         ArrayList<Item> newItem = newUserMap.get(hashkey);
+         newItem.add(movie);
     }
     
     
@@ -182,22 +188,30 @@ public class Pearson {
 //        int numOfUsers = 1000;
 //        int numOfMovies = 1700;
         Map userMap = new HashMap ();
+        Map newUserMap = new HashMap ();
         DataParser parser = new DataParser();
         List<Integer> uniqueMoives = new ArrayList<Integer>();
         ArrayList<Integer> possibleRecommendation = new ArrayList<Integer>();
         parser.parse(userMap,uniqueMoives);
-        int[][] table = parser.toTable(userMap, uniqueMoives);
+        parser.parse(newUserMap, uniqueMoives);
+        
         Pearson pearson = new Pearson();
         ArrayList<PersonSimilarity> similarityList = new ArrayList<PersonSimilarity>();
         Iterator it = userMap.entrySet().iterator();
         while (it.hasNext()){
             Map.Entry pairs = (Map.Entry)it.next();
-            System.out.println(pairs.getKey());
             possibleRecommendation = pearson.pearson_find((ArrayList<Item>)pairs.getValue(),userMap);
             for(Integer stuff : possibleRecommendation){
-                pearson.pearson_complete((ArrayList<Item>)pairs.getValue(), (int)pairs.getKey(), userMap, stuff);
+                pearson.pearson_complete((ArrayList<Item>)pairs.getValue(), (int)pairs.getKey(), userMap, newUserMap, stuff);
             }
         }
-       
+        
+       int[][] table = parser.toTable(newUserMap, uniqueMoives);
+       for(int i = 0; i < table.length; i++){
+           for(int j = 0; j <table[i].length; j++){
+               System.out.print(table[i][j] + " ");
+           }
+           System.out.println();
+       }
     }
 }

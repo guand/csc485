@@ -4,6 +4,13 @@ public class Item {
 	
 	private int mId;
 	private int rating;
+        
+        public Item(){}
+        
+        public Item(int mId, int rating){
+            this.mId = mId;
+            this.rating = rating;
+        }
 	
 	public int getmId() {
 		return mId;
@@ -18,6 +25,4 @@ public class Item {
 		this.rating = rating;
 	}
 	
-	
-
 }
