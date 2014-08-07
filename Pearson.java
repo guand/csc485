@@ -75,7 +75,7 @@ public class Pearson {
           boolean flag = false;
           while (it.hasNext()){
               Map.Entry pairs = (Map.Entry)it.next();
-              if(pairs.getKey() != hashkey){
+              if((int)pairs.getKey() != hashkey){
                   flag = false;
                   for(Item rating : (ArrayList<Item>)pairs.getValue()){
                       if(ratingContain == rating.getmId()){
@@ -184,9 +184,8 @@ public class Pearson {
         return modified_rating;
     }
     
-    public static void main(String [] args) throws IOException {
-//        int numOfUsers = 1000;
-//        int numOfMovies = 1700;
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+	public static void main(String [] args) throws IOException {
         Map userMap = new HashMap ();
         Map newUserMap = new HashMap ();
         DataParser parser = new DataParser();
@@ -196,7 +195,6 @@ public class Pearson {
         parser.parse(newUserMap, uniqueMoives);
         
         Pearson pearson = new Pearson();
-        ArrayList<PersonSimilarity> similarityList = new ArrayList<PersonSimilarity>();
         Iterator it = userMap.entrySet().iterator();
         while (it.hasNext()){
             Map.Entry pairs = (Map.Entry)it.next();
