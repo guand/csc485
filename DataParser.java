@@ -74,6 +74,25 @@ public class DataParser {
 		return table;
 
 	}
+	
+	public Map<Integer, ArrayList<Item>> toMap(int[][] table, List<Integer> uniqueMoives) {
+		Map<Integer, ArrayList<Item>> userMap = new HashMap<Integer, ArrayList<Item>>();
+		
+		for (int i=0; i< table.length;i++) {
+			ArrayList<Item> itemList = new ArrayList<Item>();
+			for (int j=0; j<table[0].length;j++) {
+				if (table[i][j] != 0) {
+					Item movie = new Item();
+					movie.setmId(uniqueMoives.get(j));
+					movie.setRating(table[i][j]);
+		    		itemList.add(movie);
+				}
+			}
+			userMap.put(i, itemList);
+		}
+		return userMap;
+		
+	}
         
 	
 	public static void main(String [] args) throws IOException {
@@ -81,6 +100,27 @@ public class DataParser {
             DataParser parser = new DataParser();
 			List<Integer> uniqueMoives = new ArrayList<Integer>();
             parser.parse(userMap,uniqueMoives);
+            int[][] table = parser.toTable(userMap, uniqueMoives);
+            for (int i=0; i< table.length;i++) {
+    			for (int j=0; j<table[0].length;j++) {
+    				System.out.print(table[i][j]);
+    			}
+    			System.out.println();
+    		}
             System.out.println();
+            Map<Integer, ArrayList<Item>> newMap = parser.toMap(table,uniqueMoives);
+            int[][] table2 = parser.toTable(newMap, uniqueMoives);
+            for (int i=0; i< table2.length;i++) {
+    			for (int j=0; j<table2[0].length;j++) {
+    				System.out.print(table2[i][j]);
+    			}
+    			System.out.println();
+    		}
+            System.out.println();
+            
+            
+            
+            
+            
 	}
 }
