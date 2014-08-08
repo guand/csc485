@@ -1,8 +1,11 @@
 package csc485project;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -14,7 +17,7 @@ public class DataParser {
 	
 	
 	public void parse (Map<Integer, ArrayList<Item>> userMap,List<Integer> uniqueMoives) throws IOException {
-		BufferedReader br = new BufferedReader(new FileReader("PearsonTestingFile.data"));
+		BufferedReader br = new BufferedReader(new FileReader("u.data"));
 	    String line = br.readLine();
 	    while (line != null) {
 	    	
@@ -93,6 +96,35 @@ public class DataParser {
 		return userMap;
 		
 	}
+	
+	public void writeToFile(HashMap<Integer, ArrayList<Item>> userMap,
+			List<Integer> uniqueMoives, int[][] table)
+			throws FileNotFoundException, UnsupportedEncodingException {
+
+		PrintWriter writer = new PrintWriter("origian_data.csv", "UTF-8");
+		writer.print(" ,");
+		// save the movie id in file
+		Iterator<Integer> movieIterator = uniqueMoives.iterator();
+		while (movieIterator.hasNext()) {
+			int movieId = movieIterator.next();
+			writer.print(movieId + ", ");
+		}
+		writer.println();
+
+		Iterator<Integer> iterator = userMap.keySet().iterator();
+
+		for (int i = 0; i < table.length; i++) {
+			int userId = iterator.next();
+			writer.print(userId + ", ");
+			for (int j = 0; j < table[0].length; j++) {
+				writer.print(table[i][j] + ", ");
+			}
+			writer.println();
+		}
+
+		writer.close();
+
+	}
         
 	
 	public static void main(String [] args) throws IOException {
@@ -101,22 +133,7 @@ public class DataParser {
 			List<Integer> uniqueMoives = new ArrayList<Integer>();
             parser.parse(userMap,uniqueMoives);
             int[][] table = parser.toTable(userMap, uniqueMoives);
-            for (int i=0; i< table.length;i++) {
-    			for (int j=0; j<table[0].length;j++) {
-    				System.out.print(table[i][j]);
-    			}
-    			System.out.println();
-    		}
-            System.out.println();
-            Map<Integer, ArrayList<Item>> newMap = parser.toMap(table,uniqueMoives);
-            int[][] table2 = parser.toTable(newMap, uniqueMoives);
-            for (int i=0; i< table2.length;i++) {
-    			for (int j=0; j<table2[0].length;j++) {
-    				System.out.print(table2[i][j]);
-    			}
-    			System.out.println();
-    		}
-            System.out.println();
+            parser.writeToFile(userMap, uniqueMoives, table);
             
             
             

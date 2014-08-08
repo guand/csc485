@@ -180,7 +180,7 @@ public class NewPearson {
 		int[][] table = parser.toTable(userMap, uniqueMoives);
 
 		int[][] prediction = new NewPearson().compute(table);
-		new NewPearson().writeToFile(userMap, uniqueMoives, table);
+		new NewPearson().writeToFile(userMap, uniqueMoives, prediction);
 		
 	}
 
